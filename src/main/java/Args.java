@@ -84,7 +84,7 @@ public class Args {
         String parameter = null;
         try {
             parameter = this.args[this.crrentArgument];
-            intArgs.get(argChar).setInteger(Integer.parseInt(parameter));
+            intArgs.get(argChar).set(parameter);
         } catch (ArrayIndexOutOfBoundsException e) {
             valid = false;
             this.errorArgumentId = argChar;
@@ -204,7 +204,7 @@ public class Args {
 
     public int getInt(char arg) {
         Args.ArgumentMarshaler am = this.intArgs.get(arg);
-        return am == null ? 0 : am.getInt();
+        return am == null ? 0 : (int) am.get();
     }
 
     private class ArgsException extends Exception {
@@ -215,16 +215,6 @@ public class Args {
     }
 
     private abstract class ArgumentMarshaler {
-        private int intValue;
-
-        public void setInteger(int intValue) {
-            this.intValue = intValue;
-        }
-
-        public int getInt() {
-            return intValue;
-        }
-
         public abstract void set(String s);
 
         public abstract Object get();
@@ -259,15 +249,16 @@ public class Args {
     }
 
     private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+        private int intValue;
 
         @Override
         public void set(String s) {
-
+            this.intValue = Integer.parseInt(s);
         }
 
         @Override
         public Object get() {
-            return null;
+            return this.intValue;
         }
     }
 }
