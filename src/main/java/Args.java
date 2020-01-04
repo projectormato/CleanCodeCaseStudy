@@ -120,7 +120,7 @@ public class Args {
     }
 
     private void setBooleanArg(char argChar, boolean value) {
-        this.booleanArgs.get(argChar).setBooleanValue(value);
+        this.booleanArgs.get(argChar).set("true");
     }
 
     private boolean isBooleanArg(char argChar) {
@@ -214,14 +214,10 @@ public class Args {
         OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT;
     }
 
-    private class ArgumentMarshaler {
-        private boolean booleanValue = false;
+    private abstract class ArgumentMarshaler {
+        protected boolean booleanValue = false;
         private String stringValue;
         private int intValue;
-
-        public void setBooleanValue(boolean booleanValue) {
-            this.booleanValue = booleanValue;
-        }
 
         public Boolean getBoolean() {
             return this.booleanValue;
@@ -242,17 +238,31 @@ public class Args {
         public int getInt() {
             return intValue;
         }
+
+        public abstract void set(String s);
     }
 
     private class BooleanArgumentMarshaler extends ArgumentMarshaler {
 
+        @Override
+        public void set(String s) {
+            this.booleanValue = true;
+        }
     }
 
     private class StringArgumentMarshaler extends ArgumentMarshaler {
 
+        @Override
+        public void set(String s) {
+
+        }
     }
 
     private class IntegerArgumentMarshaler extends ArgumentMarshaler {
 
+        @Override
+        public void set(String s) {
+
+        }
     }
 }
