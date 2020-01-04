@@ -9,7 +9,7 @@ public class Args {
     private String[] args;
     private String schema;
     private Set<Character> argsFound = new HashSet<>();
-    private Map<Character, Boolean> booleanArgs = new HashMap<>();
+    private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
     private Map<Character, String> stringArgs = new HashMap<>();
     private Map<Character, Integer> intArgs = new HashMap<>();
     private int crrentArgument;
@@ -119,8 +119,8 @@ public class Args {
         return this.stringArgs.containsKey(argChar);
     }
 
-    private void setBooleanArg(char argChar, boolean b) {
-        this.booleanArgs.put(argChar, b);
+    private void setBooleanArg(char argChar, boolean value) {
+        this.booleanArgs.get(argChar).setBooleanValue(value);
     }
 
     private boolean isBooleanArg(char argChar) {
@@ -170,7 +170,7 @@ public class Args {
     }
 
     private void parseBooleanSchemaElement(char elementId) {
-        this.booleanArgs.put(elementId, false);
+        this.booleanArgs.put(elementId, new BooleanArgumentMarshaler());
     }
 
     private boolean isBooleanSchemaElement(String elementTail) {
@@ -189,11 +189,8 @@ public class Args {
     }
 
     public boolean getBoolean(char arg) {
-        return falseIfNull(booleanArgs.get(arg));
-    }
-
-    private boolean falseIfNull(Boolean bool) {
-        return bool != null && bool;
+        Args.ArgumentMarshaler am = booleanArgs.get(arg);
+        return am != null && am.getBoolean();
     }
 
     public boolean has(char arg) {
@@ -228,6 +225,10 @@ public class Args {
 
         public void setBooleanValue(boolean booleanValue) {
             this.booleanValue = booleanValue;
+        }
+
+        public Boolean getBoolean() {
+            return this.booleanValue;
         }
     }
 
