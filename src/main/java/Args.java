@@ -130,11 +130,11 @@ public class Args {
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
         if (isBooleanSchemaElement(elementTail)) {
-            parseBooleanSchemaElement(elementId);
+            this.marshalers.put(elementId, new BooleanArgumentMarshaler());
         } else if (isStringSchemaElement(elementTail)) {
-            parseStringSchemaElement(elementId);
+            this.marshalers.put(elementId, new StringArgumentMarshaler());
         } else if (isIntegerSchemaElement(elementTail)) {
-            paeseIntegerSchemaElement(elementId);
+            this.marshalers.put(elementId, new IntegerArgumentMarshaler());
         } else {
             throw new ParseException(
                     String.format("引数: %c の書式が不正です: %s.", elementId, elementTail), 0
@@ -142,27 +142,12 @@ public class Args {
         }
     }
 
-    private void paeseIntegerSchemaElement(char elementId) {
-        ArgumentMarshaler am = new IntegerArgumentMarshaler();
-        this.marshalers.put(elementId, am);
-    }
-
     private boolean isIntegerSchemaElement(String elementTail) {
         return elementTail.equals("#");
     }
 
-    private void parseStringSchemaElement(char elementId) {
-        ArgumentMarshaler am = new StringArgumentMarshaler();
-        this.marshalers.put(elementId, am);
-    }
-
     private boolean isStringSchemaElement(String elementTail) {
         return elementTail.equals("*");
-    }
-
-    private void parseBooleanSchemaElement(char elementId) {
-        ArgumentMarshaler am = new BooleanArgumentMarshaler();
-        this.marshalers.put(elementId, am);
     }
 
     private boolean isBooleanSchemaElement(String elementTail) {
