@@ -10,7 +10,7 @@ public class Args {
     private String schema;
     private Set<Character> argsFound = new HashSet<>();
     private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
-    private Map<Character, String> stringArgs = new HashMap<>();
+    private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<>();
     private Map<Character, Integer> intArgs = new HashMap<>();
     private int crrentArgument;
     private char errorArgumentId = '\0';
@@ -106,7 +106,7 @@ public class Args {
     private void setStringArg(char argChar) throws ArgsException {
         this.crrentArgument++;
         try {
-            this.stringArgs.put(argChar, args[crrentArgument]);
+            this.stringArgs.get(argChar).setString(args[crrentArgument]);
         } catch (ArrayIndexOutOfBoundsException e) {
             this.valid = false;
             this.errorArgumentId = argChar;
@@ -162,7 +162,7 @@ public class Args {
     }
 
     private void parseStringSchemaElement(char elementId) {
-        this.stringArgs.put(elementId, "");
+        this.stringArgs.put(elementId, new StringArgumentMarshaler());
     }
 
     private boolean isStringSchemaElement(String elementTail) {
@@ -198,11 +198,8 @@ public class Args {
     }
 
     public String getString(char arg) {
-        return blankIfNull(stringArgs.get(arg));
-    }
-
-    private String blankIfNull(String s) {
-        return s == null ? "" : s;
+        Args.ArgumentMarshaler am = this.stringArgs.get(arg);
+        return am == null ? "" : am.getString();
     }
 
     public int getInt(char arg) {
@@ -222,6 +219,7 @@ public class Args {
 
     private class ArgumentMarshaler {
         private boolean booleanValue = false;
+        private String stringValue;
 
         public void setBooleanValue(boolean booleanValue) {
             this.booleanValue = booleanValue;
@@ -229,6 +227,14 @@ public class Args {
 
         public Boolean getBoolean() {
             return this.booleanValue;
+        }
+
+        public String getString() {
+            return stringValue;
+        }
+
+        public void setString(String stringValue) {
+            this.stringValue = stringValue;
         }
     }
 
