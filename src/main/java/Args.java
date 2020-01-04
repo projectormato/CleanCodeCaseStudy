@@ -190,7 +190,7 @@ public class Args {
 
     public boolean getBoolean(char arg) {
         Args.ArgumentMarshaler am = booleanArgs.get(arg);
-        return am != null && am.getBoolean();
+        return am != null && (Boolean)am.get();
     }
 
     public boolean has(char arg) {
@@ -215,13 +215,8 @@ public class Args {
     }
 
     private abstract class ArgumentMarshaler {
-        protected boolean booleanValue = false;
         private String stringValue;
         private int intValue;
-
-        public Boolean getBoolean() {
-            return this.booleanValue;
-        }
 
         public String getString() {
             return stringValue;
@@ -240,13 +235,21 @@ public class Args {
         }
 
         public abstract void set(String s);
+
+        public abstract Object get();
     }
 
     private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+        private boolean booleanValue = false;
 
         @Override
         public void set(String s) {
             this.booleanValue = true;
+        }
+
+        @Override
+        public Object get() {
+            return booleanValue;
         }
     }
 
@@ -256,6 +259,11 @@ public class Args {
         public void set(String s) {
 
         }
+
+        @Override
+        public Object get() {
+            return null;
+        }
     }
 
     private class IntegerArgumentMarshaler extends ArgumentMarshaler {
@@ -263,6 +271,11 @@ public class Args {
         @Override
         public void set(String s) {
 
+        }
+
+        @Override
+        public Object get() {
+            return null;
         }
     }
 }
