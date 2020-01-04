@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.Set;
 
 public class Args {
-
-
     private Boolean valid = true;
     private String[] args;
     private String schema;
@@ -223,5 +221,25 @@ public class Args {
 
     public enum ErrorCode {
         OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT;
+    }
+
+    private class ArgumentMarshaler {
+        private boolean booleanValue = false;
+
+        public void setBooleanValue(boolean booleanValue) {
+            this.booleanValue = booleanValue;
+        }
+    }
+
+    private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+
+    }
+
+    private class StringArgumentMarshaler extends ArgumentMarshaler {
+
+    }
+
+    private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+
     }
 }
