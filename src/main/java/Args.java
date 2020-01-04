@@ -11,7 +11,7 @@ public class Args {
     private Set<Character> argsFound = new HashSet<>();
     private Map<Character, ArgumentMarshaler> booleanArgs = new HashMap<>();
     private Map<Character, ArgumentMarshaler> stringArgs = new HashMap<>();
-    private Map<Character, Integer> intArgs = new HashMap<>();
+    private Map<Character, ArgumentMarshaler> intArgs = new HashMap<>();
     private int crrentArgument;
     private char errorArgumentId = '\0';
     private ErrorCode errorCode = ErrorCode.OK;
@@ -84,7 +84,7 @@ public class Args {
         String parameter = null;
         try {
             parameter = this.args[this.crrentArgument];
-            intArgs.put(argChar, Integer.valueOf(parameter));
+            intArgs.get(argChar).setInteger(Integer.parseInt(parameter));
         } catch (ArrayIndexOutOfBoundsException e) {
             valid = false;
             this.errorArgumentId = argChar;
@@ -154,7 +154,7 @@ public class Args {
     }
 
     private void paeseIntegerSchemaElement(char elementId) {
-        this.intArgs.put(elementId, 0);
+        this.intArgs.put(elementId, new IntegerArgumentMarshaler());
     }
 
     private boolean isIntegerSchemaElement(String elementTail) {
@@ -203,11 +203,8 @@ public class Args {
     }
 
     public int getInt(char arg) {
-        return zeroIfNull(this.intArgs.get(arg));
-    }
-
-    private int zeroIfNull(Integer i) {
-        return i == null ? 0 : i;
+        Args.ArgumentMarshaler am = this.intArgs.get(arg);
+        return am == null ? 0 : am.getInt();
     }
 
     private class ArgsException extends Exception {
@@ -220,6 +217,7 @@ public class Args {
     private class ArgumentMarshaler {
         private boolean booleanValue = false;
         private String stringValue;
+        private int intValue;
 
         public void setBooleanValue(boolean booleanValue) {
             this.booleanValue = booleanValue;
@@ -235,6 +233,14 @@ public class Args {
 
         public void setString(String stringValue) {
             this.stringValue = stringValue;
+        }
+
+        public void setInteger(int intValue) {
+            this.intValue = intValue;
+        }
+
+        public int getInt() {
+            return intValue;
         }
     }
 
