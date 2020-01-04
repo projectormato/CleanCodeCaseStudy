@@ -37,7 +37,7 @@ public class Args {
     }
 
     private boolean parseArguments() throws ArgsException {
-        for (this.crrentArgument = 0; this.crrentArgument < args.length; crrentArgument ++) {
+        for (this.crrentArgument = 0; this.crrentArgument < args.length; crrentArgument++) {
             String arg = args[crrentArgument];
             parseArgument(arg);
         }
@@ -106,7 +106,7 @@ public class Args {
     private void setStringArg(char argChar) throws ArgsException {
         this.crrentArgument++;
         try {
-            this.stringArgs.get(argChar).setString(args[crrentArgument]);
+            this.stringArgs.get(argChar).set(args[crrentArgument]);
         } catch (ArrayIndexOutOfBoundsException e) {
             this.valid = false;
             this.errorArgumentId = argChar;
@@ -180,7 +180,7 @@ public class Args {
     private void validateSchemaElementId(char elementId) throws ParseException {
         if (!Character.isLetter(elementId)) {
             throw new ParseException(
-                    "不正な文字列:" + elementId + "が、次の書式に含まれています: " + schema , 0);
+                    "不正な文字列:" + elementId + "が、次の書式に含まれています: " + schema, 0);
         }
     }
 
@@ -190,7 +190,7 @@ public class Args {
 
     public boolean getBoolean(char arg) {
         Args.ArgumentMarshaler am = booleanArgs.get(arg);
-        return am != null && (Boolean)am.get();
+        return am != null && (Boolean) am.get();
     }
 
     public boolean has(char arg) {
@@ -199,7 +199,7 @@ public class Args {
 
     public String getString(char arg) {
         Args.ArgumentMarshaler am = this.stringArgs.get(arg);
-        return am == null ? "" : am.getString();
+        return am == null ? "" : (String) am.get();
     }
 
     public int getInt(char arg) {
@@ -215,16 +215,7 @@ public class Args {
     }
 
     private abstract class ArgumentMarshaler {
-        private String stringValue;
         private int intValue;
-
-        public String getString() {
-            return stringValue;
-        }
-
-        public void setString(String stringValue) {
-            this.stringValue = stringValue;
-        }
 
         public void setInteger(int intValue) {
             this.intValue = intValue;
@@ -254,15 +245,16 @@ public class Args {
     }
 
     private class StringArgumentMarshaler extends ArgumentMarshaler {
+        private String stringValue;
 
         @Override
         public void set(String s) {
-
+            this.stringValue = s;
         }
 
         @Override
         public Object get() {
-            return null;
+            return this.stringValue;
         }
     }
 
