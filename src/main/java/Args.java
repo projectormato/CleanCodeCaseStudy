@@ -4,7 +4,6 @@ import java.util.*;
 
 public class Args {
     private Boolean valid = true;
-    private String[] args;
     private String schema;
     private Set<Character> argsFound = new HashSet<>();
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
@@ -17,13 +16,12 @@ public class Args {
 
     public Args(String schema, String[] args) throws ParseException {
         this.schema = schema;
-        this.args = args;
         this.argsList = Arrays.asList(args);
         this.valid = parse();
     }
 
     private Boolean parse() throws ParseException {
-        if (this.schema.length() == 0 && this.args.length == 0) {
+        if (this.schema.length() == 0 && this.argsList.size() == 0) {
             return true;
         }
         parseSchema();
