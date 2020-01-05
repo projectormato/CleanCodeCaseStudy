@@ -13,8 +13,4 @@ class BooleanArgumentMarshaler implements ArgumentMarshaler {
         this.booleanValue = true;
     }
 
-    @Override
-    public Object get() {
-        return booleanValue;
-    }
 }

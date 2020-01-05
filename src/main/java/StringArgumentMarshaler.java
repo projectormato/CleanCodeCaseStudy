@@ -18,8 +18,4 @@ class StringArgumentMarshaler implements ArgumentMarshaler {
         }
     }
 
-    @Override
-    public Object get() {
-        return this.stringValue;
-    }
 }

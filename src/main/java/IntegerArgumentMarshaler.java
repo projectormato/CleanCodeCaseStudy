@@ -22,8 +22,4 @@ class IntegerArgumentMarshaler implements ArgumentMarshaler {
         }
     }
 
-    @Override
-    public Object get() {
-        return this.intValue;
-    }
 }
