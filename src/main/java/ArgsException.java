@@ -37,6 +37,10 @@ class ArgsException extends Exception {
         return this.errorParameter;
     }
 
+    public String getErrorMessage() {
+        return String.format("引数 -%c は想定外です。", errorArgumentId);
+    }
+
     public enum ErrorCode {
         OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT, INVALID_ARGUMENT_NAME, INVALID_FORMAT
     }
