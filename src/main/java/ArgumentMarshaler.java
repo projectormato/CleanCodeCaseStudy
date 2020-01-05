@@ -1,4 +1,7 @@
-package PACKAGE_NAME;
+import java.util.Iterator;
 
-public class ArgumentMarshaler {
+interface ArgumentMarshaler {
+    void set(Iterator<String> currentArgument) throws ArgsException;
+
+    Object get();
 }
