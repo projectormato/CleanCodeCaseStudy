@@ -12,16 +12,15 @@ public class ArgsTest extends TestCase {
         assertEquals(0, arg.cardinarity());
     }
 
-//    public void testNoSchemaArgs() throws Exception {
-//        try {
-//            new Args("", new String[]{"-x"});
-//            fail();
-//        } catch (ArgsException e) {
-//            assertEquals(ArgsException.);
-//        }
-//        assertEquals(1, args.cardinarity());
-//        assertTrue(args.getBoolean('x'));
-//    }
+    public void testNoSchemaArgs() throws Exception {
+        try {
+            new Args("", new String[]{"-x"});
+            fail("Args constructor should have thrown exception.");
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
+    }
 
     public void testOneArgs() throws Exception {
         Args args = new Args("x", new String[]{"-x"});

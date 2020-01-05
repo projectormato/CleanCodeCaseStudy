@@ -1,4 +1,3 @@
-import java.text.ParseException;
 import java.util.*;
 
 public class Args {
@@ -13,30 +12,22 @@ public class Args {
     private Set<Character> unexpectedArguments = new HashSet<>();
     private List<String> argsList;
 
-    public Args(String schema, String[] args) throws ParseException {
+    public Args(String schema, String[] args) throws ArgsException {
         this.schema = schema;
         this.argsList = Arrays.asList(args);
-        this.valid = parse();
+        parse();
     }
 
-    private Boolean parse() throws ParseException {
-        if (this.schema.length() == 0 && this.argsList.size() == 0) {
-            return true;
-        }
+    private void parse() throws ArgsException {
         parseSchema();
-        try {
-            parseArguments();
-        } catch (ArgsException ignored) {
-        }
-        return valid;
+        parseArguments();
     }
 
-    private boolean parseArguments() throws ArgsException {
+    private void parseArguments() throws ArgsException {
         for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
             String arg = crrentArgument.next();
             parseArgument(arg);
         }
-        return true;
     }
 
     private void parseArgument(String arg) throws ArgsException {
@@ -55,9 +46,7 @@ public class Args {
         if (setArgument(argChar)) {
             this.argsFound.add(argChar);
         } else {
-            this.unexpectedArguments.add(argChar);
-            this.errorCode = ArgsException.ErrorCode.UNEXPECTED_ARGUMENT;
-            valid = false;
+            throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
         }
     }
 
@@ -74,7 +63,7 @@ public class Args {
         }
     }
 
-    private void parseSchema() throws ParseException {
+    private void parseSchema() throws ArgsException {
         for (String element : schema.split(",")) {
             if (element.length() > 0) {
                 String trimmedElement = element.trim();
@@ -83,7 +72,7 @@ public class Args {
         }
     }
 
-    private void parseSchemaElement(String element) throws ParseException {
+    private void parseSchemaElement(String element) throws ArgsException {
         char elementId = element.charAt(0);
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
@@ -94,8 +83,8 @@ public class Args {
         } else if (isIntegerSchemaElement(elementTail)) {
             this.marshalers.put(elementId, new IntegerArgumentMarshaler());
         } else {
-            throw new ParseException(
-                    String.format("引数: %c の書式が不正です: %s.", elementId, elementTail), 0
+            throw new ArgsException(
+                    String.format("引数: %c の書式が不正です: %s.", elementId, elementTail)
             );
         }
     }
@@ -112,10 +101,9 @@ public class Args {
         return elementTail.length() == 0;
     }
 
-    private void validateSchemaElementId(char elementId) throws ParseException {
+    private void validateSchemaElementId(char elementId) throws ArgsException {
         if (!Character.isLetter(elementId)) {
-            throw new ParseException(
-                    "不正な文字列:" + elementId + "が、次の書式に含まれています: " + schema, 0);
+            throw new ArgsException("不正な文字列:" + elementId + "が、次の書式に含まれています: " + schema);
         }
     }
 

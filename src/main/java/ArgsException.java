@@ -6,8 +6,22 @@ class ArgsException extends Exception {
     public ArgsException() {
     }
 
+    public ArgsException(ErrorCode errorCode, char errorArgumentId, String errorParameter) {
+        this.errorCode = errorCode;
+        this.errorArgumentId = errorArgumentId;
+        this.errorParameter = errorParameter;
+    }
+
     public ArgsException(String message) {
         super(message);
+    }
+
+    public ErrorCode getErrorCode() {
+        return this.errorCode;
+    }
+
+    public char getErrorArgumentId() {
+        return this.errorArgumentId;
     }
 
     public enum ErrorCode {
