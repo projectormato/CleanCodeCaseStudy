@@ -12,38 +12,6 @@ public class Args {
         parseArguments(Arrays.asList(args));
     }
 
-    private void parseArguments(List<String> argsList) throws ArgsException {
-        for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
-            parseArgument(crrentArgument.next());
-        }
-    }
-
-    private void parseArgument(String arg) throws ArgsException {
-        if (arg.startsWith("-")) parseElements(arg);
-    }
-
-    private void parseElements(String arg) throws ArgsException {
-        for (int i = 1; i < arg.length(); i++) {
-            parseElement(arg.charAt(i));
-        }
-    }
-
-    private void parseElement(char argChar) throws ArgsException {
-        if (setArgument(argChar)) this.argsFound.add(argChar);
-        else throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
-    }
-
-    private boolean setArgument(char argChar) throws ArgsException {
-        ArgumentMarshaler am = this.marshalers.get(argChar);
-        if (am == null) return false;
-        try {
-            am.set(this.crrentArgument);
-            return true;
-        } catch (ArgsException e) {
-            throw new ArgsException(e.getErrorCode(), argChar, e.getErrorParameter());
-        }
-    }
-
     private void parseSchema(String schema) throws ArgsException {
         for (String element : schema.split(",")) {
             if (element.length() > 0) parseSchemaElement(element.trim());
@@ -64,8 +32,41 @@ public class Args {
         if (!Character.isLetter(elementId)) throw new ArgsException(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME, elementId, null);
     }
 
+    private void parseArguments(List<String> argsList) throws ArgsException {
+        for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
+            String arg = crrentArgument.next();
+            if (arg.startsWith("-")) parseArgumentCharacters(arg);
+        }
+    }
+
+    private void parseArgumentCharacters(String arg) throws ArgsException {
+        for (int i = 1; i < arg.length(); i++) {
+            parseArgumentCharacter(arg.charAt(i));
+        }
+    }
+
+    private void parseArgumentCharacter(char argChar) throws ArgsException {
+        if (setArgument(argChar)) this.argsFound.add(argChar);
+        else throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
+    }
+
+    private boolean setArgument(char argChar) throws ArgsException {
+        ArgumentMarshaler am = this.marshalers.get(argChar);
+        if (am == null) return false;
+        try {
+            am.set(this.crrentArgument);
+            return true;
+        } catch (ArgsException e) {
+            throw new ArgsException(e.getErrorCode(), argChar, e.getErrorParameter());
+        }
+    }
+
     public int cardinarity() {
         return this.argsFound.size();
+    }
+
+    public boolean has(char arg) {
+        return this.argsFound.contains(arg);
     }
 
     public boolean getBoolean(char arg) {
@@ -78,10 +79,6 @@ public class Args {
 
     public int getInt(char arg) {
         return IntegerArgumentMarshaler.getValue(this.marshalers.get(arg));
-    }
-
-    public boolean has(char arg) {
-        return this.argsFound.contains(arg);
     }
 
 }
