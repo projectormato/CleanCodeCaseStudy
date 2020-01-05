@@ -45,6 +45,8 @@ class ArgsException extends Exception {
                 return String.format("次の引数の文字列パラメータが見つかりません -%c 。", errorArgumentId);
             case INVALID_INTEGER:
                 return String.format("引数 -%c には整数が必要ですが、次の値が指定されました。 '%s' 。", errorArgumentId, errorParameter);
+            case MISSING_INTEGER:
+                return String.format("次の引数の整数パラメータが見つかりません -%c 。", errorArgumentId);
         }
         return "";
     }

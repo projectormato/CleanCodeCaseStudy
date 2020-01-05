@@ -18,4 +18,8 @@ public class ArgsExceptionTest extends TestCase {
         assertEquals("引数 -x には整数が必要ですが、次の値が指定されました。 'Forty two' 。", e.getErrorMessage());
     }
 
+    public void testMissingInteger() throws Exception {
+        ArgsException e = new ArgsException(ArgsException.ErrorCode.MISSING_INTEGER, 'x', null);
+        assertEquals("次の引数の整数パラメータが見つかりません -x 。", e.getErrorMessage());
+    }
 }
