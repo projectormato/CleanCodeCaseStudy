@@ -12,6 +12,17 @@ public class ArgsTest extends TestCase {
         assertEquals(0, arg.cardinarity());
     }
 
+//    public void testNoSchemaArgs() throws Exception {
+//        try {
+//            new Args("", new String[]{"-x"});
+//            fail();
+//        } catch (ArgsException e) {
+//            assertEquals(ArgsException.);
+//        }
+//        assertEquals(1, args.cardinarity());
+//        assertTrue(args.getBoolean('x'));
+//    }
+
     public void testOneArgs() throws Exception {
         Args args = new Args("x", new String[]{"-x"});
         assertEquals(1, args.cardinarity());

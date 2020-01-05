@@ -1,4 +1,3 @@
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.util.*;
 
@@ -143,9 +142,6 @@ public class Args {
         return am == null ? 0 : (int) am.get();
     }
 
-    private class ArgsException extends Exception {
-    }
-
     public enum ErrorCode {
         OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT;
     }
@@ -214,7 +210,7 @@ public class Args {
             String parameter = null;
             try {
                 parameter = crrentArgument.next();
-                set(parameter);
+                this.intValue = Integer.parseInt(parameter);
             } catch (NoSuchElementException e) {
                 errorCode = ErrorCode.MISSING_INTEGER;
                 throw new ArgsException();

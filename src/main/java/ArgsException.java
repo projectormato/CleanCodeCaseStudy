@@ -1,0 +1,2 @@
+class ArgsException extends Exception {
+}
