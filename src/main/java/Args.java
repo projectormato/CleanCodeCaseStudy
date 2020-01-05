@@ -81,32 +81,6 @@ public class Args {
         return true;
     }
 
-    private void setIntArg(ArgumentMarshaler am) throws ArgsException {
-        String parameter = null;
-        try {
-            parameter = this.crrentArgument.next();
-            am.set(parameter);
-        } catch (NoSuchElementException e) {
-            valid = false;
-            this.errorCode = ErrorCode.MISSING_INTEGER;
-            throw new ArgsException();
-        } catch (NumberFormatException e) {
-            valid = false;
-            this.errorParameter = parameter;
-            this.errorCode = ErrorCode.INVALID_INTEGER;
-            throw new ArgsException();
-        }
-    }
-
-    private void setStringArg(ArgumentMarshaler am) {
-        try {
-            am.set(crrentArgument.next());
-        } catch (NoSuchElementException e) {
-            this.valid = false;
-            this.errorCode = ErrorCode.MISSING_STRING;
-        }
-    }
-
     private void parseSchema() throws ParseException {
         for (String element : schema.split(",")) {
             if (element.length() > 0) {
