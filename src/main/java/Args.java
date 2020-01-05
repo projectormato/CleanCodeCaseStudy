@@ -1,11 +1,13 @@
 import java.util.*;
 
 public class Args {
-    private Set<Character> argsFound = new HashSet<>();
-    private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
+    private Set<Character> argsFound;
+    private Map<Character, ArgumentMarshaler> marshalers;
     private Iterator<String> crrentArgument;
 
     public Args(String schema, String[] args) throws ArgsException {
+        this.argsFound  = new HashSet<>();
+        this.marshalers = new HashMap<>();
         parseSchema(schema);
         parseArguments(Arrays.asList(args));
     }
