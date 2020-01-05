@@ -22,9 +22,9 @@ public class Args {
         char elementId = element.charAt(0);
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
-        if (elementTail.length() == 0) this.marshalers.put(elementId, new BooleanArgumentMarshaler());
-        else if (elementTail.equals("*")) this.marshalers.put(elementId, new StringArgumentMarshaler());
-        else if (elementTail.equals("#")) this.marshalers.put(elementId, new IntegerArgumentMarshaler());
+        if (elementTail.length() == 0) marshalers.put(elementId, new BooleanArgumentMarshaler());
+        else if (elementTail.equals("*")) marshalers.put(elementId, new StringArgumentMarshaler());
+        else if (elementTail.equals("#")) marshalers.put(elementId, new IntegerArgumentMarshaler());
         else throw new ArgsException(ArgsException.ErrorCode.INVALID_FORMAT, elementId, null);
     }
 
@@ -33,7 +33,7 @@ public class Args {
     }
 
     private void parseArguments(List<String> argsList) throws ArgsException {
-        for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
+        for (crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
             String arg = crrentArgument.next();
             if (arg.startsWith("-")) parseArgumentCharacters(arg);
         }
@@ -46,13 +46,13 @@ public class Args {
     }
 
     private void parseArgumentCharacter(char argChar) throws ArgsException {
-        ArgumentMarshaler am = this.marshalers.get(argChar);
+        ArgumentMarshaler am = marshalers.get(argChar);
         if (am == null) {
             throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
         } else{
-            this.argsFound.add(argChar);
+            argsFound.add(argChar);
             try {
-                am.set(this.crrentArgument);
+                am.set(crrentArgument);
             } catch (ArgsException e) {
                 throw new ArgsException(e.getErrorCode(), argChar, e.getErrorParameter());
             }
@@ -60,11 +60,11 @@ public class Args {
     }
 
     public int cardinarity() {
-        return this.argsFound.size();
+        return argsFound.size();
     }
 
     public boolean has(char arg) {
-        return this.argsFound.contains(arg);
+        return argsFound.contains(arg);
     }
 
     public boolean getBoolean(char arg) {
@@ -72,11 +72,11 @@ public class Args {
     }
 
     public String getString(char arg) {
-        return StringArgumentMarshaler.getValue(this.marshalers.get(arg));
+        return StringArgumentMarshaler.getValue(marshalers.get(arg));
     }
 
     public int getInt(char arg) {
-        return IntegerArgumentMarshaler.getValue(this.marshalers.get(arg));
+        return IntegerArgumentMarshaler.getValue(marshalers.get(arg));
     }
 
 }
