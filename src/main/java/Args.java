@@ -8,8 +8,8 @@ public class Args {
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
     private Iterator<String> crrentArgument;
     private char errorArgumentId = '\0';
-    private ErrorCode errorCode = ErrorCode.OK;
     private String errorParameter = "TILT";
+    private ArgsException.ErrorCode errorCode = ArgsException.ErrorCode.OK;
     private Set<Character> unexpectedArguments = new HashSet<>();
     private List<String> argsList;
 
@@ -56,7 +56,7 @@ public class Args {
             this.argsFound.add(argChar);
         } else {
             this.unexpectedArguments.add(argChar);
-            this.errorCode = ErrorCode.UNEXPECTED_ARGUMENT;
+            this.errorCode = ArgsException.ErrorCode.UNEXPECTED_ARGUMENT;
             valid = false;
         }
     }
@@ -142,10 +142,6 @@ public class Args {
         return am == null ? 0 : (int) am.get();
     }
 
-    public enum ErrorCode {
-        OK, MISSING_STRING, MISSING_INTEGER, INVALID_INTEGER, UNEXPECTED_ARGUMENT;
-    }
-
     private abstract class ArgumentMarshaler {
         public abstract void set(String s);
 
@@ -186,7 +182,7 @@ public class Args {
             try {
                 this.stringValue = crrentArgument.next();
             } catch (NoSuchElementException e) {
-                errorCode = ErrorCode.MISSING_STRING;
+                errorCode = ArgsException.ErrorCode.MISSING_STRING;
                 throw new ArgsException();
             }
         }
@@ -212,11 +208,11 @@ public class Args {
                 parameter = crrentArgument.next();
                 this.intValue = Integer.parseInt(parameter);
             } catch (NoSuchElementException e) {
-                errorCode = ErrorCode.MISSING_INTEGER;
+                errorCode = ArgsException.ErrorCode.MISSING_INTEGER;
                 throw new ArgsException();
             } catch (NumberFormatException e) {
                 errorParameter = parameter;
-                errorCode = ErrorCode.INVALID_INTEGER;
+                errorCode = ArgsException.ErrorCode.INVALID_INTEGER;
                 throw new ArgsException();
             }
         }
