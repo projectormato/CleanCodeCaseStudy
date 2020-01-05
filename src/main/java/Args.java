@@ -192,8 +192,7 @@ public class Args {
                 parameter = crrentArgument.next();
                 this.intValue = Integer.parseInt(parameter);
             } catch (NoSuchElementException e) {
-                errorCode = ArgsException.ErrorCode.MISSING_INTEGER;
-                throw new ArgsException();
+                throw new ArgsException(ArgsException.ErrorCode.MISSING_INTEGER);
             } catch (NumberFormatException e) {
                 throw new ArgsException(ArgsException.ErrorCode.INVALID_INTEGER, parameter);
             }

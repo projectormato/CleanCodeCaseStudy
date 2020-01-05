@@ -100,7 +100,17 @@ public class ArgsTest extends TestCase {
         }
     }
 
-    // 通るように実装していく
+    public void testMissingInteger() throws Exception {
+        try {
+            new Args("x#", new String[]{"-x",});
+            fail("Args constructor should have thrown exception.");
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.MISSING_INTEGER, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
+    }
+
+        // 通るように実装していく
     public void testSimpleDoubleParent() throws Exception {
 //        Args args = new Args("x# # ", new String[]{"-x", "42.3"});
 //        assertEquals(1, args.cardinarity());
