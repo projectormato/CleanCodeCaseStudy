@@ -71,8 +71,7 @@ public class ArgsTest extends TestCase {
             fail("Args constructor should have thrown exception.");
         } catch (ArgsException e) {
             assertEquals(ArgsException.ErrorCode.MISSING_STRING, e.getErrorCode());
-            // 通るようにするべき...？
-//            assertEquals('x', e.getErrorArgumentId());
+            assertEquals('x', e.getErrorArgumentId());
         }
     }
 
@@ -88,6 +87,17 @@ public class ArgsTest extends TestCase {
         assertEquals(1, args.cardinarity());
         assertTrue(args.has('x'));
         assertEquals(42, args.getInt('x'));
+    }
+
+    public void testInvalidInteger() throws Exception {
+        try {
+            new Args("x#", new String[]{"-x", "Forty two"});
+            fail("Args constructor should have thrown exception.");
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.INVALID_INTEGER, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+            assertEquals("Forty two", e.getErrorParameter());
+        }
     }
 
     // 通るように実装していく

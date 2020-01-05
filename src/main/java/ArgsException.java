@@ -20,12 +20,21 @@ class ArgsException extends Exception {
         this.errorCode = errorCode;
     }
 
+    public ArgsException(ErrorCode errorCode, String errorParameter) {
+        this.errorCode = errorCode;
+        this.errorParameter = errorParameter;
+    }
+
     public ErrorCode getErrorCode() {
         return this.errorCode;
     }
 
     public char getErrorArgumentId() {
         return this.errorArgumentId;
+    }
+
+    public String  getErrorParameter() {
+        return this.errorParameter;
     }
 
     public enum ErrorCode {

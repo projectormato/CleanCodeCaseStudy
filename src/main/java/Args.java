@@ -57,9 +57,7 @@ public class Args {
             am.set(this.crrentArgument);
             return true;
         } catch (ArgsException e) {
-            valid = false;
-            this.errorArgumentId = argChar;
-            throw e;
+            throw new ArgsException(e.getErrorCode(), argChar, e.getErrorParameter());
         }
     }
 
@@ -197,9 +195,7 @@ public class Args {
                 errorCode = ArgsException.ErrorCode.MISSING_INTEGER;
                 throw new ArgsException();
             } catch (NumberFormatException e) {
-                errorParameter = parameter;
-                errorCode = ArgsException.ErrorCode.INVALID_INTEGER;
-                throw new ArgsException();
+                throw new ArgsException(ArgsException.ErrorCode.INVALID_INTEGER, parameter);
             }
         }
 
