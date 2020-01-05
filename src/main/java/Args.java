@@ -8,7 +8,7 @@ public class Args {
     private String schema;
     private Set<Character> argsFound = new HashSet<>();
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
-    private int crrentArgument;
+    private Iterator<String> crrentArgument;
     private char errorArgumentId = '\0';
     private ErrorCode errorCode = ErrorCode.OK;
     private String errorParameter = "TILT";
@@ -35,8 +35,8 @@ public class Args {
     }
 
     private boolean parseArguments() throws ArgsException {
-        for (this.crrentArgument = 0; this.crrentArgument < args.length; crrentArgument++) {
-            String arg = args[crrentArgument];
+        for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext();) {
+            String arg = crrentArgument.next();
             parseArgument(arg);
         }
         return true;
@@ -85,12 +85,11 @@ public class Args {
     }
 
     private void setIntArg(ArgumentMarshaler am) throws ArgsException {
-        this.crrentArgument++;
         String parameter = null;
         try {
-            parameter = this.args[this.crrentArgument];
+            parameter = this.crrentArgument.next();
             am.set(parameter);
-        } catch (ArrayIndexOutOfBoundsException e) {
+        } catch (NoSuchElementException e) {
             valid = false;
             this.errorCode = ErrorCode.MISSING_INTEGER;
             throw new ArgsException();
@@ -103,10 +102,9 @@ public class Args {
     }
 
     private void setStringArg(ArgumentMarshaler am) {
-        this.crrentArgument++;
         try {
-            am.set(args[crrentArgument]);
-        } catch (ArrayIndexOutOfBoundsException e) {
+            am.set(crrentArgument.next());
+        } catch (NoSuchElementException e) {
             this.valid = false;
             this.errorCode = ErrorCode.MISSING_STRING;
         }
