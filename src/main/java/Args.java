@@ -46,18 +46,16 @@ public class Args {
     }
 
     private void parseArgumentCharacter(char argChar) throws ArgsException {
-        if (setArgument(argChar)) this.argsFound.add(argChar);
-        else throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
-    }
-
-    private boolean setArgument(char argChar) throws ArgsException {
         ArgumentMarshaler am = this.marshalers.get(argChar);
-        if (am == null) return false;
-        try {
-            am.set(this.crrentArgument);
-            return true;
-        } catch (ArgsException e) {
-            throw new ArgsException(e.getErrorCode(), argChar, e.getErrorParameter());
+        if (am == null) {
+            throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
+        } else{
+            this.argsFound.add(argChar);
+            try {
+                am.set(this.crrentArgument);
+            } catch (ArgsException e) {
+                throw new ArgsException(e.getErrorCode(), argChar, e.getErrorParameter());
+            }
         }
     }
 
