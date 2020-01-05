@@ -59,8 +59,7 @@ public class Args {
     private void parseSchema() throws ArgsException {
         for (String element : schema.split(",")) {
             if (element.length() > 0) {
-                String trimmedElement = element.trim();
-                parseSchemaElement(trimmedElement);
+                parseSchemaElement(element.trim());
             }
         }
     }
@@ -69,33 +68,20 @@ public class Args {
         char elementId = element.charAt(0);
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
-        if (isBooleanSchemaElement(elementTail)) {
+        if (elementTail.length() == 0) {
             this.marshalers.put(elementId, new BooleanArgumentMarshaler());
-        } else if (isStringSchemaElement(elementTail)) {
+        } else if (elementTail.equals("*")) {
             this.marshalers.put(elementId, new StringArgumentMarshaler());
-        } else if (isIntegerSchemaElement(elementTail)) {
+        } else if (elementTail.equals("#")) {
             this.marshalers.put(elementId, new IntegerArgumentMarshaler());
         } else {
             throw new ArgsException(ArgsException.ErrorCode.INVALID_FORMAT, elementId, null);
         }
     }
 
-    private boolean isIntegerSchemaElement(String elementTail) {
-        return elementTail.equals("#");
-    }
-
-    private boolean isStringSchemaElement(String elementTail) {
-        return elementTail.equals("*");
-    }
-
-    private boolean isBooleanSchemaElement(String elementTail) {
-        return elementTail.length() == 0;
-    }
-
     private void validateSchemaElementId(char elementId) throws ArgsException {
         if (!Character.isLetter(elementId)) {
-            throw new ArgsException(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME,
-                    elementId, null);
+            throw new ArgsException(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME, elementId, null);
         }
     }
 
