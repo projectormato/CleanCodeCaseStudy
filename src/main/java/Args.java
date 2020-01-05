@@ -67,11 +67,11 @@ public class Args {
         if (am == null) return false;
         try {
             if (am instanceof BooleanArgumentMarshaler) {
-                setBooleanArg(am, this.crrentArgument);
+                am.set(this.crrentArgument);
             } else if (am instanceof StringArgumentMarshaler) {
-                setStringArg(am);
+                am.set(this.crrentArgument);
             } else if (am instanceof IntegerArgumentMarshaler) {
-                setIntArg(am);
+                am.set(this.crrentArgument);
             }
         } catch (ArgsException e) {
             valid = false;
@@ -105,10 +105,6 @@ public class Args {
             this.valid = false;
             this.errorCode = ErrorCode.MISSING_STRING;
         }
-    }
-
-    private void setBooleanArg(ArgumentMarshaler am, Iterator<String> crrentArgument) {
-        am.set("true");
     }
 
     private void parseSchema() throws ParseException {
@@ -223,7 +219,12 @@ public class Args {
 
         @Override
         public void set(Iterator<String> currentArgument) throws ArgsException {
-
+            try {
+                this.stringValue = crrentArgument.next();
+            } catch (NoSuchElementException e) {
+                errorCode = ErrorCode.MISSING_STRING;
+                throw new ArgsException();
+            }
         }
 
         @Override
@@ -242,7 +243,18 @@ public class Args {
 
         @Override
         public void set(Iterator<String> currentArgument) throws ArgsException {
-            
+            String parameter = null;
+            try {
+                parameter = crrentArgument.next();
+                set(parameter);
+            } catch (NoSuchElementException e) {
+                errorCode = ErrorCode.MISSING_INTEGER;
+                throw new ArgsException();
+            } catch (NumberFormatException e) {
+                errorParameter = parameter;
+                errorCode = ErrorCode.INVALID_INTEGER;
+                throw new ArgsException();
+            }
         }
 
         @Override
