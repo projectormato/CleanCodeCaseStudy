@@ -64,15 +64,14 @@ public class Args {
 
     private boolean setArgument(char argChar) throws ArgsException {
         ArgumentMarshaler am = this.marshalers.get(argChar);
+        if (am == null) return false;
         try {
             if (am instanceof BooleanArgumentMarshaler) {
-                setBooleanArg(am);
+                setBooleanArg(am, this.crrentArgument);
             } else if (am instanceof StringArgumentMarshaler) {
                 setStringArg(am);
             } else if (am instanceof IntegerArgumentMarshaler) {
                 setIntArg(am);
-            } else {
-                return false;
             }
         } catch (ArgsException e) {
             valid = false;
@@ -108,7 +107,7 @@ public class Args {
         }
     }
 
-    private void setBooleanArg(ArgumentMarshaler am) {
+    private void setBooleanArg(ArgumentMarshaler am, Iterator<String> crrentArgument) {
         am.set("true");
     }
 
@@ -190,6 +189,8 @@ public class Args {
     private abstract class ArgumentMarshaler {
         public abstract void set(String s);
 
+        public abstract void set(Iterator<String> currentArgument) throws ArgsException;
+
         public abstract Object get();
     }
 
@@ -198,6 +199,11 @@ public class Args {
 
         @Override
         public void set(String s) {
+            this.booleanValue = true;
+        }
+
+        @Override
+        public void set(Iterator<String> currentArgument) throws ArgsException {
             this.booleanValue = true;
         }
 
@@ -216,6 +222,11 @@ public class Args {
         }
 
         @Override
+        public void set(Iterator<String> currentArgument) throws ArgsException {
+
+        }
+
+        @Override
         public Object get() {
             return this.stringValue;
         }
@@ -227,6 +238,11 @@ public class Args {
         @Override
         public void set(String s) {
             this.intValue = Integer.parseInt(s);
+        }
+
+        @Override
+        public void set(Iterator<String> currentArgument) throws ArgsException {
+            
         }
 
         @Override
