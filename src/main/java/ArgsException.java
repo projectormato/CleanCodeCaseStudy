@@ -38,7 +38,13 @@ class ArgsException extends Exception {
     }
 
     public String getErrorMessage() {
-        return String.format("引数 -%c は想定外です。", errorArgumentId);
+        switch (this.errorCode) {
+            case UNEXPECTED_ARGUMENT:
+                return String.format("引数 -%c は想定外です。", errorArgumentId);
+            case MISSING_STRING:
+                return String.format("次の引数の文字列パラメータが見つかりません -%c 。", errorArgumentId);
+        }
+        return "";
     }
 
     public enum ErrorCode {
