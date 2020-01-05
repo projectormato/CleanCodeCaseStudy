@@ -103,7 +103,8 @@ public class Args {
 
     private void validateSchemaElementId(char elementId) throws ArgsException {
         if (!Character.isLetter(elementId)) {
-            throw new ArgsException("不正な文字列:" + elementId + "が、次の書式に含まれています: " + schema);
+            throw new ArgsException(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME,
+                    elementId, null);
         }
     }
 

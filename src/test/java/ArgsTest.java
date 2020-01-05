@@ -22,6 +22,26 @@ public class ArgsTest extends TestCase {
         }
     }
 
+    public void testNoSchemaMultiArgs() throws Exception {
+        try {
+            new Args("", new String[]{"-x", "-y"});
+            fail("Args constructor should have thrown exception.");
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, e.getErrorCode());
+            assertEquals('x', e.getErrorArgumentId());
+        }
+    }
+
+    public void testNonLetterSchema() throws Exception {
+        try {
+            new Args("*", new String[0]);
+            fail("Args constructor should have thrown exception.");
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME, e.getErrorCode());
+            assertEquals('*', e.getErrorArgumentId());
+        }
+    }
+
     public void testOneArgs() throws Exception {
         Args args = new Args("x", new String[]{"-x"});
         assertEquals(1, args.cardinarity());
