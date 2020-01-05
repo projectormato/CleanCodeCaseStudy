@@ -109,7 +109,6 @@ public class Args {
     }
 
     private abstract class ArgumentMarshaler {
-        public abstract void set(String s);
 
         public abstract void set(Iterator<String> currentArgument) throws ArgsException;
 
@@ -118,11 +117,6 @@ public class Args {
 
     private class BooleanArgumentMarshaler extends ArgumentMarshaler {
         private boolean booleanValue = false;
-
-        @Override
-        public void set(String s) {
-            this.booleanValue = true;
-        }
 
         @Override
         public void set(Iterator<String> currentArgument) throws ArgsException {
@@ -137,11 +131,6 @@ public class Args {
 
     private class StringArgumentMarshaler extends ArgumentMarshaler {
         private String stringValue;
-
-        @Override
-        public void set(String s) {
-            this.stringValue = s;
-        }
 
         @Override
         public void set(Iterator<String> currentArgument) throws ArgsException {
@@ -160,11 +149,6 @@ public class Args {
 
     private class IntegerArgumentMarshaler extends ArgumentMarshaler {
         private int intValue;
-
-        @Override
-        public void set(String s) {
-            this.intValue = Integer.parseInt(s);
-        }
 
         @Override
         public void set(Iterator<String> currentArgument) throws ArgsException {
