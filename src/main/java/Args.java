@@ -75,82 +75,19 @@ public class Args {
     }
 
     public boolean getBoolean(char arg) {
-        Args.ArgumentMarshaler am = marshalers.get(arg);
-        return am != null && (Boolean) am.get();
+        return BooleanArgumentMarshaler.getValue(marshalers.get(arg));
+    }
+
+    public String getString(char arg) {
+        return StringArgumentMarshaler.getValue(this.marshalers.get(arg));
+    }
+
+    public int getInt(char arg) {
+        return IntegerArgumentMarshaler.getValue(this.marshalers.get(arg));
     }
 
     public boolean has(char arg) {
         return this.argsFound.contains(arg);
     }
 
-    public String getString(char arg) {
-        Args.ArgumentMarshaler am = this.marshalers.get(arg);
-        return am == null ? "" : (String) am.get();
-    }
-
-    public int getInt(char arg) {
-        Args.ArgumentMarshaler am = this.marshalers.get(arg);
-        return am == null ? 0 : (int) am.get();
-    }
-
-    interface ArgumentMarshaler {
-
-        public abstract void set(Iterator<String> currentArgument) throws ArgsException;
-
-        public abstract Object get();
-    }
-
-    private class BooleanArgumentMarshaler implements ArgumentMarshaler {
-        private boolean booleanValue = false;
-
-        @Override
-        public void set(Iterator<String> currentArgument) throws ArgsException {
-            this.booleanValue = true;
-        }
-
-        @Override
-        public Object get() {
-            return booleanValue;
-        }
-    }
-
-    private class StringArgumentMarshaler implements ArgumentMarshaler {
-        private String stringValue;
-
-        @Override
-        public void set(Iterator<String> currentArgument) throws ArgsException {
-            try {
-                this.stringValue = crrentArgument.next();
-            } catch (NoSuchElementException e) {
-                throw new ArgsException(ArgsException.ErrorCode.MISSING_STRING);
-            }
-        }
-
-        @Override
-        public Object get() {
-            return this.stringValue;
-        }
-    }
-
-    private class IntegerArgumentMarshaler implements ArgumentMarshaler {
-        private int intValue;
-
-        @Override
-        public void set(Iterator<String> currentArgument) throws ArgsException {
-            String parameter = null;
-            try {
-                parameter = crrentArgument.next();
-                this.intValue = Integer.parseInt(parameter);
-            } catch (NoSuchElementException e) {
-                throw new ArgsException(ArgsException.ErrorCode.MISSING_INTEGER);
-            } catch (NumberFormatException e) {
-                throw new ArgsException(ArgsException.ErrorCode.INVALID_INTEGER, parameter);
-            }
-        }
-
-        @Override
-        public Object get() {
-            return this.intValue;
-        }
-    }
 }
