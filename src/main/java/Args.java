@@ -4,15 +4,13 @@ public class Args {
     private Set<Character> argsFound = new HashSet<>();
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
     private Iterator<String> crrentArgument;
-    private List<String> argsList;
 
     public Args(String schema, String[] args) throws ArgsException {
-        this.argsList = Arrays.asList(args);
         parseSchema(schema);
-        parseArguments();
+        parseArguments(Arrays.asList(args));
     }
 
-    private void parseArguments() throws ArgsException {
+    private void parseArguments(List<String> argsList) throws ArgsException {
         for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
             parseArgument(crrentArgument.next());
         }
