@@ -33,7 +33,7 @@ public class Args {
     }
 
     private boolean parseArguments() throws ArgsException {
-        for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext();) {
+        for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
             String arg = crrentArgument.next();
             parseArgument(arg);
         }
@@ -66,19 +66,13 @@ public class Args {
         ArgumentMarshaler am = this.marshalers.get(argChar);
         if (am == null) return false;
         try {
-            if (am instanceof BooleanArgumentMarshaler) {
-                am.set(this.crrentArgument);
-            } else if (am instanceof StringArgumentMarshaler) {
-                am.set(this.crrentArgument);
-            } else if (am instanceof IntegerArgumentMarshaler) {
-                am.set(this.crrentArgument);
-            }
+            am.set(this.crrentArgument);
+            return true;
         } catch (ArgsException e) {
             valid = false;
             this.errorArgumentId = argChar;
             throw e;
         }
-        return true;
     }
 
     private void parseSchema() throws ParseException {
