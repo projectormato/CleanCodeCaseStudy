@@ -1,20 +1,14 @@
 import java.util.*;
 
 public class Args {
-    private String schema;
     private Set<Character> argsFound = new HashSet<>();
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
     private Iterator<String> crrentArgument;
     private List<String> argsList;
 
     public Args(String schema, String[] args) throws ArgsException {
-        this.schema = schema;
         this.argsList = Arrays.asList(args);
-        parse();
-    }
-
-    private void parse() throws ArgsException {
-        parseSchema();
+        parseSchema(schema);
         parseArguments();
     }
 
@@ -50,7 +44,7 @@ public class Args {
         }
     }
 
-    private void parseSchema() throws ArgsException {
+    private void parseSchema(String schema) throws ArgsException {
         for (String element : schema.split(",")) {
             if (element.length() > 0) parseSchemaElement(element.trim());
         }
