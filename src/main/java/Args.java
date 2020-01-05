@@ -93,14 +93,14 @@ public class Args {
         return am == null ? 0 : (int) am.get();
     }
 
-    private abstract class ArgumentMarshaler {
+    interface ArgumentMarshaler {
 
         public abstract void set(Iterator<String> currentArgument) throws ArgsException;
 
         public abstract Object get();
     }
 
-    private class BooleanArgumentMarshaler extends ArgumentMarshaler {
+    private class BooleanArgumentMarshaler implements ArgumentMarshaler {
         private boolean booleanValue = false;
 
         @Override
@@ -114,7 +114,7 @@ public class Args {
         }
     }
 
-    private class StringArgumentMarshaler extends ArgumentMarshaler {
+    private class StringArgumentMarshaler implements ArgumentMarshaler {
         private String stringValue;
 
         @Override
@@ -132,7 +132,7 @@ public class Args {
         }
     }
 
-    private class IntegerArgumentMarshaler extends ArgumentMarshaler {
+    private class IntegerArgumentMarshaler implements ArgumentMarshaler {
         private int intValue;
 
         @Override
