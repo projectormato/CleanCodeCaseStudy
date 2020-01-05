@@ -1,15 +1,10 @@
 import java.util.*;
 
 public class Args {
-    private Boolean valid = true;
     private String schema;
     private Set<Character> argsFound = new HashSet<>();
     private Map<Character, ArgumentMarshaler> marshalers = new HashMap<>();
     private Iterator<String> crrentArgument;
-    private char errorArgumentId = '\0';
-    private String errorParameter = "TILT";
-    private ArgsException.ErrorCode errorCode = ArgsException.ErrorCode.OK;
-    private Set<Character> unexpectedArguments = new HashSet<>();
     private List<String> argsList;
 
     public Args(String schema, String[] args) throws ArgsException {
