@@ -1,8 +1,6 @@
+import java.lang.reflect.Array;
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class Args {
     private Boolean valid = true;
@@ -15,10 +13,12 @@ public class Args {
     private ErrorCode errorCode = ErrorCode.OK;
     private String errorParameter = "TILT";
     private Set<Character> unexpectedArguments = new HashSet<>();
+    private List<String> argsList;
 
     public Args(String schema, String[] args) throws ParseException {
         this.schema = schema;
         this.args = args;
+        this.argsList = Arrays.asList(args);
         this.valid = parse();
     }
 
