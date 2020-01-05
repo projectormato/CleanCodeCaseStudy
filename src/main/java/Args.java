@@ -83,9 +83,7 @@ public class Args {
         } else if (isIntegerSchemaElement(elementTail)) {
             this.marshalers.put(elementId, new IntegerArgumentMarshaler());
         } else {
-            throw new ArgsException(
-                    String.format("引数: %c の書式が不正です: %s.", elementId, elementTail)
-            );
+            throw new ArgsException(ArgsException.ErrorCode.INVALID_FORMAT, elementId, null);
         }
     }
 

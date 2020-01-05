@@ -34,11 +34,21 @@ public class ArgsTest extends TestCase {
 
     public void testNonLetterSchema() throws Exception {
         try {
-            new Args("*", new String[0]);
+            new Args("*", new String[]{});
             fail("Args constructor should have thrown exception.");
         } catch (ArgsException e) {
             assertEquals(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME, e.getErrorCode());
             assertEquals('*', e.getErrorArgumentId());
+        }
+    }
+
+    public void testInvalidArgumentFormat() throws Exception {
+        try {
+            new Args("f~", new String[]{});
+            fail("Args constructor should have thrown exception.");
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.INVALID_FORMAT, e.getErrorCode());
+            assertEquals('f', e.getErrorArgumentId());
         }
     }
 
