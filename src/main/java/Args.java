@@ -20,15 +20,12 @@ public class Args {
 
     private void parseArguments() throws ArgsException {
         for (this.crrentArgument = argsList.iterator(); crrentArgument.hasNext(); ) {
-            String arg = crrentArgument.next();
-            parseArgument(arg);
+            parseArgument(crrentArgument.next());
         }
     }
 
     private void parseArgument(String arg) throws ArgsException {
-        if (arg.startsWith("-")) {
-            parseElements(arg);
-        }
+        if (arg.startsWith("-")) parseElements(arg);
     }
 
     private void parseElements(String arg) throws ArgsException {
@@ -38,11 +35,8 @@ public class Args {
     }
 
     private void parseElement(char argChar) throws ArgsException {
-        if (setArgument(argChar)) {
-            this.argsFound.add(argChar);
-        } else {
-            throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
-        }
+        if (setArgument(argChar)) this.argsFound.add(argChar);
+        else throw new ArgsException(ArgsException.ErrorCode.UNEXPECTED_ARGUMENT, argChar, null);
     }
 
     private boolean setArgument(char argChar) throws ArgsException {
@@ -58,9 +52,7 @@ public class Args {
 
     private void parseSchema() throws ArgsException {
         for (String element : schema.split(",")) {
-            if (element.length() > 0) {
-                parseSchemaElement(element.trim());
-            }
+            if (element.length() > 0) parseSchemaElement(element.trim());
         }
     }
 
@@ -68,21 +60,14 @@ public class Args {
         char elementId = element.charAt(0);
         String elementTail = element.substring(1);
         validateSchemaElementId(elementId);
-        if (elementTail.length() == 0) {
-            this.marshalers.put(elementId, new BooleanArgumentMarshaler());
-        } else if (elementTail.equals("*")) {
-            this.marshalers.put(elementId, new StringArgumentMarshaler());
-        } else if (elementTail.equals("#")) {
-            this.marshalers.put(elementId, new IntegerArgumentMarshaler());
-        } else {
-            throw new ArgsException(ArgsException.ErrorCode.INVALID_FORMAT, elementId, null);
-        }
+        if (elementTail.length() == 0) this.marshalers.put(elementId, new BooleanArgumentMarshaler());
+        else if (elementTail.equals("*")) this.marshalers.put(elementId, new StringArgumentMarshaler());
+        else if (elementTail.equals("#")) this.marshalers.put(elementId, new IntegerArgumentMarshaler());
+        else throw new ArgsException(ArgsException.ErrorCode.INVALID_FORMAT, elementId, null);
     }
 
     private void validateSchemaElementId(char elementId) throws ArgsException {
-        if (!Character.isLetter(elementId)) {
-            throw new ArgsException(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME, elementId, null);
-        }
+        if (!Character.isLetter(elementId)) throw new ArgsException(ArgsException.ErrorCode.INVALID_ARGUMENT_NAME, elementId, null);
     }
 
     public int cardinarity() {
