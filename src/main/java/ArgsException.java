@@ -16,6 +16,10 @@ class ArgsException extends Exception {
         super(message);
     }
 
+    public ArgsException(ErrorCode errorCode) {
+        this.errorCode = errorCode;
+    }
+
     public ErrorCode getErrorCode() {
         return this.errorCode;
     }

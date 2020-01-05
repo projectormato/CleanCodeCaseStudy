@@ -169,8 +169,7 @@ public class Args {
             try {
                 this.stringValue = crrentArgument.next();
             } catch (NoSuchElementException e) {
-                errorCode = ArgsException.ErrorCode.MISSING_STRING;
-                throw new ArgsException();
+                throw new ArgsException(ArgsException.ErrorCode.MISSING_STRING);
             }
         }
 

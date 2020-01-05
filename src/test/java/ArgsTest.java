@@ -65,6 +65,17 @@ public class ArgsTest extends TestCase {
         assertEquals("param", args.getString('x'));
     }
 
+    public void testMissingStringArgument() throws Exception {
+        try {
+            new Args("x*", new String[]{"-x"});
+            fail("Args constructor should have thrown exception.");
+        } catch (ArgsException e) {
+            assertEquals(ArgsException.ErrorCode.MISSING_STRING, e.getErrorCode());
+            // 通るようにするべき...？
+//            assertEquals('x', e.getErrorArgumentId());
+        }
+    }
+
     public void testSpaceInFormat() throws Exception {
         Args args = new Args("x, y", new String[]{"-xy"});
         assertEquals(2, args.cardinarity());
